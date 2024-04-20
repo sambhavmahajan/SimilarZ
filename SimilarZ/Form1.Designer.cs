@@ -85,6 +85,7 @@
             button3.TabIndex = 4;
             button3.Text = "Check";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // Form1
             // 
