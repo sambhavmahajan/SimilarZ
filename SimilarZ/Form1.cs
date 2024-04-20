@@ -75,11 +75,9 @@ namespace SimilarZ
             string s1 = richTextBox1.Text.ToLower();
             string s2 = richTextBox2.Text.ToLower();
 
-            HashSet<string> words1 = new HashSet<string>(s1.Split(' '));
-
             int res = CalculateConsecutiveSimilarity(s1, s2);
 
-            double similarityPercentage = (double)res / (words1.Count) * 100;
+            double similarityPercentage = (double)res / (s1.Split(' ').Length) * 100;
 
             progressBar1.Value = (int)similarityPercentage;
             label1.Text = $"{similarityPercentage:F2}%";
