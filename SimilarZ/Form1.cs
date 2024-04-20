@@ -76,7 +76,6 @@ namespace SimilarZ
             string s2 = richTextBox2.Text.ToLower();
 
             HashSet<string> words1 = new HashSet<string>(s1.Split(' '));
-            HashSet<string> words2 = new HashSet<string>(s2.Split(' '));
 
             int res = CalculateConsecutiveSimilarity(s1, s2);
 
