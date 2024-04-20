@@ -61,8 +61,9 @@ namespace SimilarZ
 
             HashSet<string> commonWords = new HashSet<string>(words1);
             commonWords.IntersectWith(words2);
+            commonWords.ExceptWith(genericWords);
 
-            double similarityPercentage = (double)commonWords.Count / (words1.Count + words2.Count) * 100;
+            double similarityPercentage = (double)commonWords.Count / (words1.Count + words2.Count) * 200;
 
             progressBar1.Value = (int)similarityPercentage;
             label1.Text = $"{similarityPercentage:F2}%";
