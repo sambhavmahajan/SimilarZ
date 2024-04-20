@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BaseOutputPath>C:\Users\Asus\Desktop\SimilarZ</BaseOutputPath>
+    <Authors>Sambhav Mahajan</Authors>
   </PropertyGroup>
 
 </Project>

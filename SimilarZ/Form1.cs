@@ -39,18 +39,37 @@ namespace SimilarZ
         }
 
 
-        private int CalculateSimilarity(string s1, string s2)
+        private int CalculateConsecutiveSimilarity(string s1, string s2)
         {
-            string[] words1 = s1.Split(new char[] { ' ', ',', '.', '?', '!', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] words2 = s2.Split(new char[] { ' ', ',', '.', '?', '!', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] separators = { " ", ",", ".", "?", "!", ";" };
+            string[] words1 = s1.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            string[] words2 = s2.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
             HashSet<string> nonGenericWordsSet1 = new HashSet<string>(words1.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
             HashSet<string> nonGenericWordsSet2 = new HashSet<string>(words2.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
 
-            int nonGenericSimilarity = nonGenericWordsSet1.Intersect(nonGenericWordsSet2).Count();
+            int maxConsecutiveSimilarity = 0;
+            int currentConsecutiveSimilarity = 0;
 
-            return nonGenericSimilarity;
+            int minLength = Math.Min(words1.Length, words2.Length);
+
+            for (int i = 0; i < minLength; i++)
+            {
+                if (nonGenericWordsSet1.Contains(words1[i]) && nonGenericWordsSet2.Contains(words2[i]))
+                {
+                    currentConsecutiveSimilarity++;
+                    maxConsecutiveSimilarity = Math.Max(maxConsecutiveSimilarity, currentConsecutiveSimilarity);
+                }
+                else
+                {
+                    currentConsecutiveSimilarity = 0;
+                }
+            }
+
+            return maxConsecutiveSimilarity;
         }
+
+
         private void button3_Click(object sender, EventArgs e)
         {
             string s1 = richTextBox1.Text.ToLower();
@@ -59,11 +78,9 @@ namespace SimilarZ
             HashSet<string> words1 = new HashSet<string>(s1.Split(' '));
             HashSet<string> words2 = new HashSet<string>(s2.Split(' '));
 
-            HashSet<string> commonWords = new HashSet<string>(words1);
-            commonWords.IntersectWith(words2);
-            commonWords.ExceptWith(genericWords);
+            int res = CalculateConsecutiveSimilarity(s1, s2);
 
-            double similarityPercentage = (double)commonWords.Count / (words1.Count + words2.Count) * 200;
+            double similarityPercentage = (double)res / (words1.Count) * 100;
 
             progressBar1.Value = (int)similarityPercentage;
             label1.Text = $"{similarityPercentage:F2}%";
