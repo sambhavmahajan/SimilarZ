@@ -150,6 +150,8 @@
             Controls.Add(button1);
             Controls.Add(richTextBox2);
             Controls.Add(richTextBox1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "Form1";
             Text = "SimilarZ Version 1.0.0";
             ResumeLayout(false);
