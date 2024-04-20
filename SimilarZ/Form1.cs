@@ -45,15 +45,15 @@ namespace SimilarZ
             string[] words1 = s1.Split(separators, StringSplitOptions.RemoveEmptyEntries);
             string[] words2 = s2.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
-            HashSet<string> nonGenericWordsSet1 = new HashSet<string>(words1.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
-            HashSet<string> nonGenericWordsSet2 = new HashSet<string>(words2.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
+            HashSet<string> WordsSet1 = new HashSet<string>(words1.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
+            HashSet<string> WordsSet2 = new HashSet<string>(words2.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
 
             int res = 0;
             int currentConsecutiveSimilarity = 0;
 
             for (int i = 0; i < words1.Length; i++)
             {
-                if (nonGenericWordsSet1.Contains(words1[i]) && nonGenericWordsSet2.Contains(words1[i]))
+                if (WordsSet1.Contains(words1[i]) && WordsSet2.Contains(words1[i]))
                 {
                     currentConsecutiveSimilarity++;
                 }
