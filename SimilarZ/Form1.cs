@@ -42,7 +42,7 @@ namespace SimilarZ
             for (int i = 0; i < words1.Length; i++)
             {
                 int j = 0;
-                while (j < words2.Length)
+                while (i < words1.Length && j < words2.Length)
                 {
                     if (words1[i] == words2[j])
                     {
@@ -72,11 +72,18 @@ namespace SimilarZ
             string s2 = richTextBox2.Text.ToLower();
 
             int res = CalculateConsecutiveSimilarity(s1, s2);
-
-            double similarityPercentage = ((double)res) / (s1.Split(' ').Length) * 100;
- 
-            progressBar1.Value = (int)similarityPercentage;
-            label1.Text = $"{similarityPercentage:F2}%";
+            string[] separators = { " ", ",", ".", "?", "!", ";" };
+            string[] words1 = s1.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            double similarityPercentage = ((double)res) / (words1.Length) * 100;
+            if ((int)similarityPercentage > 100) {
+                progressBar1.Value = 100;
+                label1.Text = $"100%";
+            }
+            else
+            {
+                progressBar1.Value = (int)similarityPercentage;
+                label1.Text = $"{similarityPercentage:F2}%";
+            }
         }
     }
 }
