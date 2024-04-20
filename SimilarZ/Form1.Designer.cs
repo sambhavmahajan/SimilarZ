@@ -151,7 +151,7 @@
             Controls.Add(richTextBox2);
             Controls.Add(richTextBox1);
             Name = "Form1";
-            Text = "SimilarZ";
+            Text = "SimilarZ Version 1.0.0";
             ResumeLayout(false);
             PerformLayout();
         }
