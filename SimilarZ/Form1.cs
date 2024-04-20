@@ -9,13 +9,6 @@ namespace SimilarZ
 {
     public partial class Form1 : Form
     {
-        private HashSet<string> genericWords = new HashSet<string>
-        {
-            "a", "an", "and", "as", "at", "be", "by", "for", "from", "has", "have",
-            "he", "her", "him", "his", "in", "is", "it", "its", "of", "on", "or",
-            "that", "the", "their", "there", "they", "this", "to", "was", "were",
-            "which", "with", "you"
-        };
 
         public Form1()
         {
@@ -38,37 +31,75 @@ namespace SimilarZ
             }
         }
 
+        private Dictionary<string, List<int>> MapIndicesToWords(string[] words)
+        {
+            Dictionary<string, List<int>> indexMap = new Dictionary<string, List<int>>();
+            for (int i = 0; i < words.Length; i++)
+            {
+                string word = words[i].ToLower();
+                if (!indexMap.ContainsKey(word))
+                {
+                    indexMap[word] = new List<int>();
+                }
+                indexMap[word].Add(i);
+            }
+            return indexMap;
+        }
 
-        private int CalculateConsecutiveSimilarity(string s1, string s2)
+        public int CalculateConsecutiveSimilarity(string s1, string s2)
         {
             string[] separators = { " ", ",", ".", "?", "!", ";" };
             string[] words1 = s1.Split(separators, StringSplitOptions.RemoveEmptyEntries);
             string[] words2 = s2.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
-            HashSet<string> WordsSet1 = new HashSet<string>(words1.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
-            HashSet<string> WordsSet2 = new HashSet<string>(words2.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, List<int>> wordIndicesMap1 = MapIndicesToWords(words1);
+            Dictionary<string, List<int>> wordIndicesMap2 = MapIndicesToWords(words2);
 
             int res = 0;
             int currentConsecutiveSimilarity = 0;
 
-            for (int i = 0; i < words1.Length; i++)
+            foreach (var word in wordIndicesMap1.Keys)
             {
-                if (WordsSet1.Contains(words1[i]) && WordsSet2.Contains(words1[i]))
+                if (wordIndicesMap2.ContainsKey(word))
                 {
-                    currentConsecutiveSimilarity++;
+                    List<int> indices1 = wordIndicesMap1[word];
+                    List<int> indices2 = wordIndicesMap2[word];
+
+                    int index1Index = 0;
+                    int index2Index = 0;
+                    while (index1Index < indices1.Count && index2Index < indices2.Count)
+                    {
+                        int index1 = indices1[index1Index];
+                        int index2 = indices2[index2Index];
+
+                        if (index2 - index1 == index2Index - index1Index)
+                        {
+                            currentConsecutiveSimilarity++;
+                        }
+                        else
+                        {
+                            if (currentConsecutiveSimilarity >= 2)
+                            {
+                                res += currentConsecutiveSimilarity;
+                            }
+                            currentConsecutiveSimilarity = 0;
+                        }
+
+                        index1Index++;
+                        index2Index++;
+                    }
                 }
-                else
-                {
-                    if (currentConsecutiveSimilarity > 2) res += currentConsecutiveSimilarity;
-                    currentConsecutiveSimilarity = 0;
-                }
+            }
+
+            if (currentConsecutiveSimilarity >= 2)
+            {
+                res += currentConsecutiveSimilarity;
             }
 
             return res;
         }
 
-
-        private void button3_Click(object sender, EventArgs e)
+    private void button3_Click(object sender, EventArgs e)
         {
             string s1 = richTextBox1.Text.ToLower();
             string s2 = richTextBox2.Text.ToLower();
@@ -76,7 +107,7 @@ namespace SimilarZ
             int res = CalculateConsecutiveSimilarity(s1, s2);
 
             double similarityPercentage = (double)res / (s1.Split(' ').Length) * 100;
-
+ 
             progressBar1.Value = (int)similarityPercentage;
             label1.Text = $"{similarityPercentage:F2}%";
         }
