@@ -48,25 +48,23 @@ namespace SimilarZ
             HashSet<string> nonGenericWordsSet1 = new HashSet<string>(words1.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
             HashSet<string> nonGenericWordsSet2 = new HashSet<string>(words2.Select(w => w.ToLower()).Except(genericWords), StringComparer.OrdinalIgnoreCase);
 
-            int maxConsecutiveSimilarity = 0;
+            int res = 0;
             int currentConsecutiveSimilarity = 0;
 
-            int minLength = Math.Min(words1.Length, words2.Length);
-
-            for (int i = 0; i < minLength; i++)
+            for (int i = 0; i < words1.Length; i++)
             {
-                if (nonGenericWordsSet1.Contains(words1[i]) && nonGenericWordsSet2.Contains(words2[i]))
+                if (nonGenericWordsSet1.Contains(words1[i]) && nonGenericWordsSet2.Contains(words1[i]))
                 {
                     currentConsecutiveSimilarity++;
-                    maxConsecutiveSimilarity = Math.Max(maxConsecutiveSimilarity, currentConsecutiveSimilarity);
                 }
                 else
                 {
+                    if (currentConsecutiveSimilarity > 2) res += currentConsecutiveSimilarity;
                     currentConsecutiveSimilarity = 0;
                 }
             }
 
-            return maxConsecutiveSimilarity;
+            return res;
         }
 
 
