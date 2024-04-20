@@ -19,7 +19,7 @@ namespace SimilarZ
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                richTextBox1.Text = File.ReadAllText(openFileDialog1.FileName);
+                richTextBox2.Text = File.ReadAllText(openFileDialog1.FileName);
             }
         }
         private HashSet<string> genericWords = new HashSet<string>
