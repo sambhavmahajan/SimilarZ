@@ -6,5 +6,13 @@ namespace SimilarZ
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                richTextBox1.Text = 
+            }
+        }
     }
 }
