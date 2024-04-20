@@ -35,13 +35,12 @@ namespace SimilarZ
             string s1 = richTextBox1.Text.ToString();
             string s2 = richTextBox2.Text.ToString();
             HashSet<string> words = new HashSet<string>();
-            string[] strings0 = s1.Split(' ');
-            string[] strings1 = s2.Split(' ');
-            foreach (string s in strings0)
+            string[] words1 = s1.Split(new char[] { ' ', ',', '.', '?', '!', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in words1)
             {
                 words.Add(s);
             }
-            foreach (string s in strings1)
+            foreach (string s in words)
             {
                 if (genericWords.Contains(s) == false)
                 {
@@ -56,7 +55,8 @@ namespace SimilarZ
 
         private void button3_Click(object sender, EventArgs e)
         {
-            int res = similar(richTextBox1.Text.ToString(), richTextBox2.Text.ToString());
+            int res = similar(richTextBox1.Text.ToString().ToLower(), richTextBox2.Text.ToString().ToLower());
+            progressBar1.Value = res / (richTextBox1.Text.Length + richTextBox2.Text.Length) * 2;
         }
     }
 }
