@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace SimilarZ
@@ -37,12 +38,56 @@ namespace SimilarZ
             }
         }
 
-        private int CalculateSimilarity(string s1, string s2)
+private int CalculateSimilarity(string s1, string s2)
         {
             string[] words1 = s1.Split(new char[] { ' ', ',', '.', '?', '!', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            HashSet<string> words = new HashSet<string>(words1, StringComparer.OrdinalIgnoreCase);
-            words.ExceptWith(genericWords);
-            return words.Count(word => s2.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0);
+            string[] words2 = s2.Split(new char[] { ' ', ',', '.', '?', '!', ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            HashSet<string> wordsSet1 = new HashSet<string>(words1, StringComparer.OrdinalIgnoreCase);
+            HashSet<string> wordsSet2 = new HashSet<string>(words2, StringComparer.OrdinalIgnoreCase);
+
+            wordsSet1.ExceptWith(genericWords);
+            wordsSet2.ExceptWith(genericWords);
+
+            int similarity = 0;
+
+            foreach (var word in wordsSet1)
+            {
+                if (wordsSet2.Contains(word))
+                {
+                    int count1 = CountConsecutiveOccurrences(words1, word);
+                    int count2 = CountConsecutiveOccurrences(words2, word);
+
+                    if (count1 >= 3 || count2 >= 3)
+                    {
+                        similarity += Math.Max(count1, count2);
+                    }
+                    else if (count1 >= 2 || count2 >= 2)
+                    {
+                        similarity += 2;
+                    }
+                    else
+                    {
+                        similarity++;
+                    }
+                }
+            }
+
+            return similarity;
+        }
+
+        private int CountConsecutiveOccurrences(string[] words, string target)
+        {
+            int count = 0;
+            for (int i = 0; i < words.Length - 2; i++)
+            {
+                if (words[i] == target && words[i + 1] == target && words[i + 2] == target)
+                {
+                    count++;
+                    i += 2;
+                }
+            }
+            return count;
         }
 
         private void button3_Click(object sender, EventArgs e)
