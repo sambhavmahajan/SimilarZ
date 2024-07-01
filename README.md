@@ -27,5 +27,5 @@ SimilarZ is a simple desktop application designed to compare the similarity betw
 - .NET Framework
 
 ## License
-This project is licensed under the [Apache 2.0 License](LICENSE).
+This project is licensed under the [Apache License 2.0](LICENSE).
 
